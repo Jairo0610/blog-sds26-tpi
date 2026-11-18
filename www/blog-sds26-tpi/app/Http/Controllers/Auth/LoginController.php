@@ -9,22 +9,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+//Controlador de autentificación
 class LoginController extends Controller
 {
+    //Muestra el formulario al iniciar la sesión
     public function create(): View
     {
         return view('auth.login');
     }
 
-    //Metodo para ingresar a la sesión
+    //Metodo para realizar el inicio de sesión del usuario mediante el formulario
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'))
-            ->with('success', '¡Bienvenido, '.Auth::user()->nombre.'!');
+        return redirect()->intended(route('admin.dashboard'))->with('success', '¡Bienvenido, '.Auth::user()->name.'!');
     }
 
     //Metodo para cerrar la sesión actual
