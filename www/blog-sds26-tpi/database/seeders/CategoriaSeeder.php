@@ -14,14 +14,14 @@ class CategoriaSeeder extends Seeder
     public function run(): void
     {
         $categorias = [
-            ['nombre' => 'Inauguración',          'descripcion' => 'Apertura oficial de la Semana de Sistemas 2026.'],
-            ['nombre' => 'Ponencias',             'descripcion' => 'Tema, expositor, ideas centrales y aprendizajes.'],
-            ['nombre' => 'Talleres',              'descripcion' => 'Herramientas, procedimiento, práctica y resultados.'],
-            ['nombre' => 'Bingo',                 'descripcion' => 'Dinámica, experiencia y participación.'],
-            ['nombre' => 'Feria de proyectos',    'descripcion' => 'Proyectos visitados, tecnologías e innovación.'],
-            ['nombre' => 'Comelona de pizza',     'descripcion' => 'Desarrollo, convivencia y experiencia.'],
+            ['nombre' => 'Inauguración', 'descripcion' => 'Apertura oficial de la Semana de Sistemas 2026.'],
+            ['nombre' => 'Ponencias', 'descripcion' => 'Tema, expositor, ideas centrales y aprendizajes.'],
+            ['nombre' => 'Talleres', 'descripcion' => 'Herramientas, procedimiento, práctica y resultados.'],
+            ['nombre' => 'Bingo', 'descripcion' => 'Dinámica, experiencia y participación.'],
+            ['nombre' => 'Feria de proyectos', 'descripcion' => 'Proyectos visitados, tecnologías e innovación.'],
+            ['nombre' => 'Comelona de pizza', 'descripcion' => 'Desarrollo, convivencia y experiencia.'],
             ['nombre' => 'Torneo de fútbol sala', 'descripcion' => 'Desarrollo, equipos y participación como jugador o espectador.'],
-            ['nombre' => 'Parrillada',            'descripcion' => 'Descripción, convivencia y reflexión.'],
+            ['nombre' => 'Parrillada', 'descripcion' => 'Descripción, convivencia y reflexión.'],
         ];
 
         foreach ($categorias as $datos) {

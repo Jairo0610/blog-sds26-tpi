@@ -9,4 +9,22 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-sds-green: #8cc63f;
+    --color-sds-green-dark: #6fa52b;
+    --color-sds-mint: #f1f9e5;
+    --color-sds-ink: #111613;
+}
+
+@utility sds-stripes {
+    position: absolute;
+    width: 9rem;
+    height: 9rem;
+    pointer-events: none;
+    background: linear-gradient(
+        135deg,
+        var(--color-sds-green) 0 22%,
+        transparent 22% 30%,
+        var(--color-sds-green) 30% 36%,
+        transparent 36%
+    );
 }

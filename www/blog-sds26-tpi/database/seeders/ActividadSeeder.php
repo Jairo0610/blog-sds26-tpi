@@ -22,6 +22,7 @@ class ActividadSeeder extends Seeder
             ['Ponencias', 'Ponencia 1', 'Investigación aplicada en IoT para la agricultura en El Salvador.', '2026-11-16 10:00', 'Auditorio 1'],
             ['Ponencias', 'Ponencia 2', 'Energías alternativas y eficiencia energética.', '2026-11-16 13:00', 'Auditorio 1'],
             ['Ponencias', 'Ponencia 3', 'Eficiencia energética, optimización de recursos y sostenibilidad aplicada a soluciones tecnológicas.', '2026-11-17 08:00', 'Auditorio 1'],
+            ['Ponencias', 'Ponencia 4', 'Ciberseguridad ESET', '2026-11-17 10:00', 'Auditorio 1'],
             ['Talleres', 'Taller', 'Sostenibilidad digital y análisis energético mediante Electricity Map.', '2026-11-17 13:00', 'Auditorio 1'],
             ['Bingo', 'Bingo', 'Bingo de la Semana de Sistemas.', '2026-11-18 08:00', 'Auditorio 1'],
             ['Feria de proyectos', 'Expo Systems', 'Los proyectos más innovadores realizados por los estudiantes de Ingeniería de Sistemas Informáticos.', '2026-11-19 08:00', 'Plaza Minerva'],
