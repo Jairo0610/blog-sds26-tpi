@@ -24,6 +24,6 @@
     @endif
 
     <h1 class="text-3xl font-black uppercase">Panel de control</h1>
-    <p class="mt-2 text-sds-ink/60">Sesión iniciada como <strong>{{ auth()->user()->correo }}</strong>.</p>
+    <p class="mt-2 text-sds-ink/60">Sesión iniciada como <strong>{{ auth()->user()->name }}</strong>.</p>
 </main>
 @endsection

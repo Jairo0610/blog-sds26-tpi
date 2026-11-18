@@ -12,7 +12,7 @@
 
         {{-- Logos --}}
         <div class="relative flex items-center gap-6">
-            <img src="{{ asset('img/aseis-logo.png') }}" alt="ASEIS - Universidad de El Salvador" class="h-12 w-auto xl:h-14">
+            <img src="{{ asset('img/aseis-logo.png') }}" alt="ASEIS - Universidad de El Salvador" class="h-12 w-auto xl:h-14" >
             <span class="h-14 w-px bg-sds-ink"></span>
             <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26 Green IoT" class="h-16 w-auto xl:h-20">
         </div>
