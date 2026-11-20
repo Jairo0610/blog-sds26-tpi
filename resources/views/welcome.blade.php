@@ -105,6 +105,11 @@
                 {{-- Filtro por categoría --}}
                 @if ($categorias->isNotEmpty())
                     <div class="mt-5 flex flex-wrap items-center gap-3">
+                        @auth
+                            <a href="{{ route('admin.posts.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,#8cc63f,#6fa52b);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px rgba(111,165,43,.28);">
+                                <span>+ Nueva publicación</span>
+                            </a>
+                        @endauth
                         <label for="filtro-categoria" class="text-sm font-semibold text-sds-ink/70">
                             Categoría:
                         </label>
