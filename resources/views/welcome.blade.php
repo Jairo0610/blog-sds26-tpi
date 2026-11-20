@@ -104,26 +104,28 @@
 
                 {{-- Filtro por categoría --}}
                 @if ($categorias->isNotEmpty())
-                    <div class="flex flex-wrap items-center gap-2">
-                        @auth
-                            <a href="{{ route('admin.posts.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:999px;background:linear-gradient(135deg,#8cc63f,#6fa52b);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px rgba(111,165,43,.28);">
-                                <span>+ Nueva publicación</span>
-                            </a>
-                        @endauth
-                        <a href="{{ route('home') }}#publicaciones"
-                            @class([
-                                'rounded-full px-4 py-1.5 text-sm font-medium transition',
-                                'bg-sds-ink text-white' => ! $categoriaActual,
-                                'bg-sds-mint text-sds-ink hover:bg-sds-green/30' => $categoriaActual,
-                            ])>Todas</a>
-                        @foreach ($categorias as $categoria)
-                            <a href="{{ route('home', ['categoria' => $categoria->slug]) }}#publicaciones"
-                                @class([
-                                    'rounded-full px-4 py-1.5 text-sm font-medium transition',
-                                    'bg-sds-ink text-white' => $categoriaActual === $categoria->slug,
-                                    'bg-sds-mint text-sds-ink hover:bg-sds-green/30' => $categoriaActual !== $categoria->slug,
-                                ])>{{ $categoria->nombre }}</a>
-                        @endforeach
+                    <div class="mt-5 flex flex-wrap items-center gap-3">
+                        <label for="filtro-categoria" class="text-sm font-semibold text-sds-ink/70">
+                            Categoría:
+                        </label>
+                        <select
+                            id="filtro-categoria"
+                            name="categoria"
+                            onchange="if (this.value) { window.location.href = this.value; }"
+                            style="padding:8px 14px;border-radius:12px;border:1px solid #cfd7cb;background:#ffffff;color:#111613;font-size:13.5px;font-weight:600;cursor:pointer;"
+                        >
+                            <option value="{{ route('home') }}#publicaciones" @selected(! $categoriaActual)>
+                                Todas las categorías
+                            </option>
+                            @foreach ($categorias as $categoria)
+                                <option
+                                    value="{{ route('home', ['categoria' => $categoria->slug]) }}#publicaciones"
+                                    @selected($categoriaActual === $categoria->slug)
+                                >
+                                    {{ $categoria->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 @endif
             </div>
@@ -167,8 +169,13 @@
                                 @if ($post->resumen)
                                     <p class="mt-2 line-clamp-3 text-sm text-sds-ink/65">{{ $post->resumen }}</p>
                                 @endif
-                                @if ($post->usuario)
-                                    <p class="mt-auto pt-5 text-xs font-medium text-sds-ink/50">Por {{ $post->usuario->name }}</p>
+                                @php
+                                    $autoresTexto = ($post->autores && $post->autores->isNotEmpty())
+                                        ? $post->autores->pluck(\x27name\x27)->join(\x27, \x27)
+                                        : ($post->usuario->name ?? null);
+                                @endphp
+                                @if ($autoresTexto)
+                                    <p class="mt-auto pt-5 text-xs font-medium text-sds-ink/50">Por {{ $autoresTexto }}</p>
                                 @endif
                             </div>
                         </article>
