@@ -339,6 +339,9 @@
             </a>
             <div class="sds-nav-actions">
                 @auth
+                    <a href="{{ route('admin.posts.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,#8cc63f,#6fa52b);color:#ffffff;font-size:12.5px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px rgba(111,165,43,.25);">
+                        <span>+ Nueva publicación</span>
+                    </a>
                     <a href="{{ route('admin.posts.edit', $post) }}" class="sds-btn-outline">Editar entrada</a>
                 @endauth
                 <a href="{{ route('home') }}" class="sds-btn-outline">← Volver al blog</a>
