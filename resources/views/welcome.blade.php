@@ -170,10 +170,10 @@
                                     <p class="mt-2 line-clamp-3 text-sm text-sds-ink/65">{{ $post->resumen }}</p>
                                 @endif
                                 @php
-                                    $autoresTexto = ($post->autores && $post->autores->isNotEmpty())
-                                        ? $post->autores->pluck(\x27name\x27)->join(\x27, \x27)
-                                        : ($post->usuario->name ?? null);
-                                @endphp
+    $autoresTexto = ($post->autores && $post->autores->isNotEmpty())
+        ? $post->autores->pluck('name')->join(', ')
+        : ($post->usuario->name ?? null);
+@endphp
                                 @if ($autoresTexto)
                                     <p class="mt-auto pt-5 text-xs font-medium text-sds-ink/50">Por {{ $autoresTexto }}</p>
                                 @endif

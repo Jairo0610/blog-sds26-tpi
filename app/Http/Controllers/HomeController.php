@@ -20,7 +20,7 @@ class HomeController extends Controller
         $categorias = CategoriaModel::whereHas('entradas', fn ($q) => $q->publicadas())->orderBy('nombre')->get();
 
         //Publicaciones visibles al público
-        $posts = PostModel::publicadas()->with(['categoria', 'usuario'])->when($categoriaActual, fn ($q) => $q->whereHas(
+        $posts = PostModel::publicadas()->with(['categoria', 'usuario', 'autores'])->when($categoriaActual, fn ($q) => $q->whereHas(
                 'categoria', fn ($c) => $c->where('slug', $categoriaActual)
             ))->recientes()->paginate(9)->withQueryString();
 
@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         $relacionadas = PostModel::publicadas()
             ->where('id', '!=', $post->id)
-            ->with(['categoria', 'usuario'])
+            ->with(['categoria', 'usuario', 'autores'])
             ->recientes()
             ->limit(3)
             ->get();
