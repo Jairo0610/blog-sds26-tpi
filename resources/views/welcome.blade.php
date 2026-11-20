@@ -16,7 +16,8 @@
     {{--  Encabezado  --}}
     <header class="sticky top-0 z-30 border-b border-black/5 bg-white/90 backdrop-blur">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-20">
-            <a href="{{ route('home') }}" class="flex items-center gap-3 sm:gap-4">
+            
+                <a href="{{ route('home') }}#publicaciones" class="flex items-center gap-3 sm:gap-4">
                 <img src="{{ asset('img/aseis-logo.png') }}" alt="ASEIS" class="h-7 w-auto sm:h-9">
                 <span class="h-8 w-px bg-sds-ink/80 sm:h-10"></span>
                 <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26 Green IoT" class="h-9 w-auto sm:h-12">
@@ -103,7 +104,12 @@
 
                 {{-- Filtro por categoría --}}
                 @if ($categorias->isNotEmpty())
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        @auth
+                            <a href="{{ route('admin.posts.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:999px;background:linear-gradient(135deg,#8cc63f,#6fa52b);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px rgba(111,165,43,.28);">
+                                <span>+ Nueva publicación</span>
+                            </a>
+                        @endauth
                         <a href="{{ route('home') }}#publicaciones"
                             @class([
                                 'rounded-full px-4 py-1.5 text-sm font-medium transition',
