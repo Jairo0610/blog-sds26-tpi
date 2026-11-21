@@ -33,6 +33,7 @@
 
             <div class="flex flex-wrap items-center gap-2.5">
                 <a href="{{ route('home') }}" class="{{ $btnGhost }}">Ver blog</a>
+                <a href="{{ route('admin.categorias.index') }}" class="{{ $btnGhost }}">Categorías</a>
                 <a href="{{ route('admin.posts.create') }}" class="{{ $btnPrimary }}">+ Nueva publicación</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -51,7 +52,7 @@
 
         <section class="relative mb-6 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-[20px] border border-[#e3e8e0] bg-linear-to-br from-white from-0% to-[#f3faea] to-100% px-5 py-[18px] shadow-[0_4px_20px_rgba(17,22,19,.035)] sm:px-7 sm:py-6">
             <div>
-                <span class="mb-2 inline-flex items-center gap-1.5 rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11px] font-bold tracking-[.06em] text-[#4f7918] uppercase before:size-1.5 before:rounded-full before:bg-sds-green before:content-['']">Semana de Sistemas 2026 · Administración</span>
+                <span class="mb-2 inline-flex items-center gap-1.5 rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11px] font-bold tracking-[.06em] text-[#4f7918] uppercase before:size-1.5 before:rounded-full before:bg-sds-green before:content-['']">Administración</span>
                 <h1 class="m-0 text-[22px] leading-[1.15] font-extrabold tracking-[-.01em] sm:text-[26px]">Panel de control</h1>
                 <p class="mt-1.5 mb-0 text-[13.5px] text-[#4a544d]">Sesión iniciada como <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->carnet }}).</p>
             </div>
@@ -158,6 +159,7 @@
                                             <a href="{{ route('posts.show', $post->slug) }}" class="{{ $actBtn }} border border-[#e8f4d4] bg-[#f4faea] text-[#4f7918] hover:border-sds-green hover:bg-[#e8f4d4]">Ver</a>
                                         @endif
                                         <a href="{{ route('admin.posts.edit', $post) }}" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Editar</a>
+                                        <a href="{{ route('admin.posts.edit', $post) }}#galeria" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Imágenes</a>
                                         <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" onsubmit="return confirm('¿Eliminar esta publicación?');">
                                             @csrf
                                             @method('DELETE')

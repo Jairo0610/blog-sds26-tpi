@@ -1,3 +1,8 @@
+@extends('layouts.auth')
+
+@section('title', 'Panel de control')
+
+@section('content')
 @csrf
 
 @php

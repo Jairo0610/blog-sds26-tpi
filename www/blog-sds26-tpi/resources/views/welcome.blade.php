@@ -284,7 +284,7 @@
                 <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26" class="h-9 w-auto">
             </div>
             <p class="text-sm text-sds-ink/55">
-                Asociación de Estudiantes de Ingeniería de Sistemas · Universidad de El Salvador, FMO
+                Universidad de El Salvador FMO
             </p>
         </div>
     </footer>

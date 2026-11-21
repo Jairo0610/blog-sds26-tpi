@@ -11,7 +11,7 @@
                 <span class="h-7 w-px bg-[#cfd7cb]"></span>
                 <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26 Green IoT" class="block h-[30px] w-auto max-w-none sm:h-[38px]">
             </a>
-            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-[#cfd7cb] bg-white px-3.5 py-2 text-[13px] font-semibold text-sds-ink no-underline transition hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">← <span class="hidden sm:inline">Volver al panel</span></a>
+            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 rounded-full border border-[#cfd7cb] bg-white px-3.5 py-2 text-[13px] font-semibold text-sds-ink no-underline transition hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]"><span class="hidden sm:inline">Volver al panel</span></a>
         </div>
     </header>
 
