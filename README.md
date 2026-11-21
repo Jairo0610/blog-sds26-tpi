@@ -67,7 +67,7 @@ Deben aparecer `servidor_laravel`, `servidor_postgres` y `servidor_pgadmin` en e
 ### 2. Configurar la aplicación (dentro del contenedor)
 
 ```bash
-docker exec -it -u www-data servidor bash
+docker exec -it -u www-data servidor_laravel bash
 cd /var/www/html/blog-sds26-tpi
 
 composer install
