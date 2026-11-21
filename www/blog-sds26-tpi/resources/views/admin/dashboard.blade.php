@@ -17,6 +17,8 @@
     $td = 'border-b border-[#f0f3ed] px-[18px] py-3.5 align-middle text-[#4a544d]';
 
     $actBtn = 'inline-flex items-center justify-center rounded-lg px-3 py-1.5 font-[inherit] text-xs font-semibold no-underline cursor-pointer transition';
+    $iconBtn = 'inline-flex size-8 items-center justify-center rounded-lg border bg-white p-0 font-[inherit] no-underline cursor-pointer transition';
+    $iconSvg = 'width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
 @endphp
 
 <div class="min-h-screen bg-[#f4f7f1] bg-[radial-gradient(900px_380px_at_100%_-10%,rgba(140,198,63,.16),transparent_60%),radial-gradient(700px_320px_at_-10%_0%,rgba(140,198,63,.08),transparent_60%)] font-['Poppins',ui-sans-serif,system-ui,sans-serif] text-sds-ink antialiased">
@@ -154,16 +156,25 @@
                                     @endif
                                 </td>
                                 <td class="{{ $td }} text-right">
-                                    <div class="inline-flex items-center justify-end gap-2 whitespace-nowrap">
-                                        @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
-                                            <a href="{{ route('posts.show', $post->slug) }}" class="{{ $actBtn }} border border-[#e8f4d4] bg-[#f4faea] text-[#4f7918] hover:border-sds-green hover:bg-[#e8f4d4]">Ver</a>
-                                        @endif
+                                    <div class="inline-flex items-center justify-end gap-1.5 whitespace-nowrap">
                                         <a href="{{ route('admin.posts.edit', $post) }}" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Editar</a>
-                                        <a href="{{ route('admin.posts.edit', $post) }}#galeria" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Imágenes</a>
+
+                                        @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
+                                            <a href="{{ route('posts.show', $post->slug) }}" title="Ver publicación" aria-label="Ver publicación" class="{{ $iconBtn }} border-[#e8f4d4] text-[#4f7918] hover:border-sds-green hover:bg-[#f4faea]">
+                                                <svg {!! $iconSvg !!}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </a>
+                                        @endif
+
+                                        <a href="{{ route('admin.posts.edit', $post) }}#galeria" title="Gestionar imágenes" aria-label="Gestionar imágenes" class="{{ $iconBtn }} border-[#cfd7cb] text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">
+                                            <svg {!! $iconSvg !!}><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>
+                                        </a>
+
                                         <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" onsubmit="return confirm('¿Eliminar esta publicación?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="{{ $actBtn }} border border-[#ffc9c9] bg-[#fff5f5] text-[#c92a2a] hover:border-[#ffa8a8] hover:bg-[#ffe3e3]">Eliminar</button>
+                                            <button type="submit" title="Eliminar publicación" aria-label="Eliminar publicación" class="{{ $iconBtn }} border-[#ffc9c9] bg-[#fff5f5] text-[#c92a2a] hover:border-[#ffa8a8] hover:bg-[#ffe3e3]">
+                                                <svg {!! $iconSvg !!}><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                                            </button>
                                         </form>
                                     </div>
                                 </td>
