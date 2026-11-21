@@ -26,7 +26,7 @@ class PostController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $this->validatePost($request);
+        $validated = $this->validatePost($request, true);
 
         $rutaImagen = null;
         if ($request->hasFile('imagen_principal')) {
@@ -52,7 +52,26 @@ class PostController extends Controller
 
         $post->autores()->sync($autoresIds);
 
-        return redirect()->route('admin.dashboard')->with('success', 'La publicación "' . $post->titulo . '" se guardó correctamente.');
+        //Evidencias subidas al crear la publicación: pasan a la galería con el integrante indicado (vacío = ambos)
+        $archivos = $request->file('evidencias', []);
+        $orden = 0;
+
+        foreach ($archivos as $archivo) {
+            $post->imagenes()->create([
+                'ruta' => $archivo->store('posts/galeria', 'public'),
+                'usuario_id' => $validated['evidencia_usuario_id'] ?? null,
+                'descripcion' => $validated['evidencia_descripcion'] ?? null,
+                'orden' => ++$orden,
+            ]);
+        }
+
+        $mensaje = 'La publicación "' . $post->titulo . '" se guardó correctamente.';
+
+        if ($orden > 0) {
+            $mensaje .= $orden === 1 ? ' Se agregó 1 evidencia a la galería.' : " Se agregaron {$orden} evidencias a la galería.";
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', $mensaje);
     }
 
     public function edit(PostModel $post): View
@@ -122,9 +141,9 @@ class PostController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'La publicación "' . $titulo . '" fue eliminada.');
     }
 
-    private function validatePost(Request $request): array
+    private function validatePost(Request $request, bool $conEvidencias = false): array
     {
-        return $request->validate([
+        $reglas = [
             'titulo' => ['required', 'string', 'max:200'],
             'fecha_actividad' => ['required', 'date'],
             'categoria_id' => ['required', 'integer', Rule::exists('categorias', 'id')],
@@ -135,7 +154,9 @@ class PostController extends Controller
             'estado' => ['required', Rule::in([PostModel::ESTADO_BORRADOR, PostModel::ESTADO_PUBLICADO])],
             'autores' => ['nullable', 'array'],
             'autores.*' => ['integer', Rule::exists('users', 'id')],
-        ], [
+        ];
+
+        $mensajes = [
             'titulo.required' => 'El título de la publicación es obligatorio.',
             'titulo.max' => 'El título no puede superar los 200 caracteres.',
             'fecha_actividad.required' => 'La fecha de la actividad es obligatoria.',
@@ -150,6 +171,29 @@ class PostController extends Controller
             'imagen_principal.max' => 'La imagen no debe pesar más de 4 MB.',
             'estado.required' => 'Debes indicar si la entrada es borrador o publicada.',
             'estado.in' => 'El estado seleccionado no es válido.',
-        ]);
+        ];
+
+        //Solo al crear: evidencias opcionales que se guardan en la galería de la publicación
+        if ($conEvidencias) {
+            $autoresIds = collect($request->input('autores', [$request->user()->id]))->map(fn ($id) => (int) $id)->all();
+
+            $reglas += [
+                'evidencias' => ['nullable', 'array', 'max:10'],
+                'evidencias.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+                'evidencia_usuario_id' => ['nullable', 'integer', Rule::in($autoresIds)],
+                'evidencia_descripcion' => ['nullable', 'string', 'max:200'],
+            ];
+
+            $mensajes += [
+                'evidencias.max' => 'Puedes subir un máximo de 10 evidencias a la vez.',
+                'evidencias.*.image' => 'Cada evidencia seleccionada debe ser una imagen.',
+                'evidencias.*.mimes' => 'Las evidencias solo pueden ser imágenes JPG, JPEG, PNG o WEBP.',
+                'evidencias.*.max' => 'Cada evidencia no debe pesar más de 4 MB.',
+                'evidencia_usuario_id.in' => 'El integrante de la evidencia debe ser uno de los autores seleccionados.',
+                'evidencia_descripcion.max' => 'La descripción de la evidencia no puede superar los 200 caracteres.',
+            ];
+        }
+
+        return $request->validate($reglas, $mensajes);
     }
 }

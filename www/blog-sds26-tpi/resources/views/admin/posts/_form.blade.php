@@ -227,6 +227,54 @@
     </div>
 </div>
 
+@unless (isset($post))
+    <section class="{{ $card }} mt-5">
+        <div class="{{ $cardHead }}">
+            <span class="{{ $step }}">5</span>
+            <div>
+                <h2 class="m-0 text-[15px] font-bold">Evidencias de la actividad <span class="text-xs font-normal text-[#78827b]">(opcional)</span></h2>
+                <p class="mt-0.5 mb-0 text-xs font-normal text-[#78827b]">Se guardan en la galería de la publicación · JPG, JPEG, PNG o WEBP · Máx. 4 MB c/u · hasta 10 por carga. Podrás agregar más después al editar.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 min-[900px]:grid-cols-[1.3fr_1fr_1.2fr]">
+            <div>
+                <label for="evidencias" class="{{ $label }} mb-[7px]">Imágenes</label>
+                <input type="file" id="evidencias" name="evidencias[]" multiple accept="image/jpeg,image/png,image/webp"
+                       class="{{ $input }} px-3 py-2 text-[13px] file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-[#e8f4d4] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#4f7918] @if ($errors->has('evidencias') || $errors->has('evidencias.*')) {{ $errBorder }} @endif">
+                <p id="evidencias-count" class="mt-1.5 mb-0 text-xs text-[#78827b]"></p>
+                @error('evidencias') <p class="{{ $errText }}">{{ $message }}</p> @enderror
+                @foreach ($errors->get('evidencias.*') as $mensajesEvidencia)
+                    @foreach (array_unique($mensajesEvidencia) as $mensajeEvidencia)
+                        <p class="{{ $errText }}">{{ $mensajeEvidencia }}</p>
+                    @endforeach
+                @endforeach
+            </div>
+
+            <div>
+                <label for="evidencia_usuario_id" class="{{ $label }} mb-[7px]">¿De quién es?</label>
+                <select id="evidencia_usuario_id" name="evidencia_usuario_id" class="{{ $input }} @error('evidencia_usuario_id') {{ $errBorder }} @enderror">
+                    <option value="">Ambos integrantes</option>
+                    @foreach ($usuarios as $usuario)
+                        <option value="{{ $usuario->id }}" @selected((string) old('evidencia_usuario_id') === (string) $usuario->id)>{{ $usuario->name }}</option>
+                    @endforeach
+                </select>
+                @error('evidencia_usuario_id') <p class="{{ $errText }}">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label for="evidencia_descripcion" class="{{ $label }} mb-[7px]">Descripción <span class="text-xs font-normal text-[#78827b]">(se aplica a todas)</span></label>
+                <input type="text" id="evidencia_descripcion" name="evidencia_descripcion" value="{{ old('evidencia_descripcion') }}" maxlength="200"
+                       placeholder="Ej. Asistencia de ambos integrantes al taller"
+                       class="{{ $input }} @error('evidencia_descripcion') {{ $errBorder }} @enderror">
+                @error('evidencia_descripcion') <p class="{{ $errText }}">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
+        <p class="mt-3.5 mb-0 text-xs text-[#78827b]">El integrante debe ser uno de los autores seleccionados. Si el formulario muestra errores, vuelve a seleccionar las imágenes.</p>
+    </section>
+@endunless
+
 <div class="mt-6 flex flex-wrap items-center justify-between gap-3.5 rounded-2xl border border-[#e3e8e0] bg-white px-[22px] py-4 shadow-[0_2px_12px_rgba(17,22,19,.035)]">
     <span class="text-xs text-[#78827b]">Los campos marcados con <span class="font-bold text-[#c92a2a]">*</span> son obligatorios.</span>
     <div class="flex w-full items-center gap-2.5 sm:w-auto">
@@ -250,6 +298,15 @@ document.addEventListener('DOMContentLoaded', function () {
         update();
         input.addEventListener('input', update);
     }
+    const evidencias = document.getElementById('evidencias');
+    const evidenciasCount = document.getElementById('evidencias-count');
+    if (evidencias && evidenciasCount) {
+        evidencias.addEventListener('change', function () {
+            const n = evidencias.files.length;
+            evidenciasCount.textContent = n === 0 ? '' : n + (n === 1 ? ' imagen seleccionada' : ' imágenes seleccionadas');
+        });
+    }
+
     bindCounter('titulo', 'titulo-counter', 200);
     bindCounter('resumen', 'resumen-counter', 300);
 
