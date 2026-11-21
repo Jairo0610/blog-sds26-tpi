@@ -12,7 +12,7 @@ class EvidenciaModel extends Model
     protected $fillable = [
         'actividad_id',
         'usuario_id',
-        'entrada_id',
+        'post_id',
         'tipo',
         'ruta_archivo',
         'descripcion',

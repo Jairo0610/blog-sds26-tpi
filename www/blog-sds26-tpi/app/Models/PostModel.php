@@ -77,7 +77,7 @@ class PostModel extends Model
 
     public function autores(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'post_usuario', 'post_id', 'usuario_id')
+        return $this->belongsToMany(User::class, 'post_user', 'post_id', 'usuario_id')
             ->withTimestamps();
     }
 

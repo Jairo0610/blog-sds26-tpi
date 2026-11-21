@@ -51,12 +51,12 @@ class User extends Authenticatable
     
     public function createdPosts(): HasMany
     {
-        return $this->hasMany(PostModel::class);
+        return $this->hasMany(PostModel::class, 'usuario_id');
     }
 
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(PostModel::class)->withTimestamps();
+        return $this->belongsToMany(PostModel::class, 'post_user', 'usuario_id', 'post_id')->withTimestamps();
     }
 
     public function evidences(): HasMany
