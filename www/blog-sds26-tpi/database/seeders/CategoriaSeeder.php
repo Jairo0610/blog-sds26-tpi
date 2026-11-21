@@ -14,7 +14,6 @@ class CategoriaSeeder extends Seeder
     public function run(): void
     {
         $categorias = [
-            ['nombre' => 'Inauguración', 'descripcion' => 'Apertura oficial de la Semana de Sistemas 2026.'],
             ['nombre' => 'Ponencias', 'descripcion' => 'Tema, expositor, ideas centrales y aprendizajes.'],
             ['nombre' => 'Talleres', 'descripcion' => 'Herramientas, procedimiento, práctica y resultados.'],
             ['nombre' => 'Bingo', 'descripcion' => 'Dinámica, experiencia y participación.'],
