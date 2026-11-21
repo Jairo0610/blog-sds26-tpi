@@ -37,7 +37,7 @@ class HomeController extends Controller
     // Metodo para mostrar el detalle de una publicacion publicada
     public function show(string $slug): View
     {
-        $post = PostModel::publicadas()->where('slug', $slug)->with(['categoria', 'actividad', 'usuario', 'autores', 'imagenes.integrante', 'evidencias'])->firstOrFail();
+        $post = PostModel::publicadas()->where('slug', $slug)->with(['categoria', 'actividad', 'usuario', 'autores', 'imagenes.integrante'])->firstOrFail();
 
         $relacionadas = PostModel::publicadas()->where('id', '!=', $post->id)->with(['categoria', 'usuario', 'autores'])->recientes()->limit(3)->get();
 
