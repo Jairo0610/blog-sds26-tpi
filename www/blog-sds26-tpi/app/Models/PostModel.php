@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PostModel extends Model
@@ -83,6 +84,22 @@ class PostModel extends Model
     public function imagenes(): HasMany
     {
         return $this->hasMany(PostImagenModel::class, 'post_id')->orderBy('orden');
+    }
+
+    //Integrantes de la publicación: los autores asignados o, si no hay, el usuario que la creó
+    public function integrantes(): Collection
+    {
+        return $this->autores->isNotEmpty() ? $this->autores : collect([$this->usuario])->filter();
+    }
+
+    //Integrantes que todavía no tienen ninguna evidencia en la galería (una imagen de "ambos" cubre a todos)
+    public function integrantesSinEvidencia(): Collection
+    {
+        if ($this->imagenes->contains(fn ($imagen) => $imagen->usuario_id === null)) {
+            return collect();
+        }
+
+        return $this->integrantes()->reject(fn ($integrante) => $this->imagenes->contains('usuario_id', $integrante->id))->values();
     }
 
     public function evidencias(): HasMany

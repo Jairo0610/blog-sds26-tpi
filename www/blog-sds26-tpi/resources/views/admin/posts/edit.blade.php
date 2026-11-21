@@ -46,6 +46,8 @@
             $input = 'w-full rounded-xl border-[1.5px] border-[#cfd7cb] bg-white px-3 py-2 font-[inherit] text-[13px] leading-normal text-sds-ink transition placeholder:text-[#78827b]/70 focus:border-sds-green focus:ring-4 focus:ring-sds-green/20 focus:outline-none';
             $actBtn = 'inline-flex items-center justify-center rounded-lg px-3 py-1.5 font-[inherit] text-xs font-semibold no-underline cursor-pointer transition';
             $erroresGaleria = $errors->getBag('galeria');
+            $integrantes = $post->integrantes();
+            $sinEvidencia = $post->integrantesSinEvidencia();
         @endphp
 
         <section id="galeria" class="{{ $card }} mt-6">
@@ -55,6 +57,14 @@
                     <h2 class="m-0 text-[15px] font-bold">Galería de imágenes y evidencias</h2>
                     <p class="mt-0.5 mb-0 text-xs font-normal text-[#78827b]">Aparecen en el detalle de la publicación · JPG, JPEG, PNG o WEBP · Máx. 4 MB c/u · hasta 10 por carga.</p>
                 </div>
+            </div>
+
+            <div class="mb-5 flex flex-wrap items-center gap-2 text-xs">
+                <span class="font-semibold text-[#4a544d]">Evidencias por integrante:</span>
+                @foreach ($integrantes as $integrante)
+                    @php($cubierto = $sinEvidencia->doesntContain('id', $integrante->id))
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-bold {{ $cubierto ? 'bg-[#e8f4d4] text-[#4f7918]' : 'bg-[#fff5f5] text-[#c92a2a]' }}">{{ $cubierto ? '✓' : '✗' }} {{ $integrante->name }}</span>
+                @endforeach
             </div>
 
             @if ($erroresGaleria->any())
@@ -68,11 +78,20 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.posts.imagenes.store', $post) }}" data-keep-scroll enctype="multipart/form-data" class="mb-6 grid grid-cols-1 items-end gap-3 min-[800px]:grid-cols-[1fr_1fr_auto]">
+            <form method="POST" action="{{ route('admin.posts.imagenes.store', $post) }}" data-keep-scroll enctype="multipart/form-data" class="mb-6 grid grid-cols-1 items-end gap-3 min-[900px]:grid-cols-[1.2fr_1fr_1.2fr_auto]">
                 @csrf
                 <div>
                     <label for="galeria-imagenes" class="mb-[7px] block text-[13px] font-semibold">Imágenes <span class="font-bold text-[#c92a2a]">*</span></label>
                     <input type="file" id="galeria-imagenes" name="imagenes[]" multiple required accept="image/jpeg,image/png,image/webp" class="{{ $input }} file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-[#e8f4d4] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#4f7918]">
+                </div>
+                <div>
+                    <label for="galeria-usuario" class="mb-[7px] block text-[13px] font-semibold">¿De quién es?</label>
+                    <select id="galeria-usuario" name="usuario_id" class="{{ $input }}">
+                        <option value="">Ambos integrantes</option>
+                        @foreach ($integrantes as $integrante)
+                            <option value="{{ $integrante->id }}">{{ $integrante->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <label for="galeria-descripcion" class="mb-[7px] block text-[13px] font-semibold">Descripción <span class="text-xs font-normal text-[#78827b]">(opcional, se aplica a todas)</span></label>
@@ -92,8 +111,14 @@
                                 <form method="POST" action="{{ route('admin.posts.imagenes.update', [$post, $imagen]) }}" data-keep-scroll class="flex flex-col gap-2">
                                     @csrf
                                     @method('PUT')
+                                    <select name="usuario_id" aria-label="Integrante dueño de la evidencia" class="{{ $input }}">
+                                        <option value="">Ambos integrantes</option>
+                                        @foreach ($integrantes as $integrante)
+                                            <option value="{{ $integrante->id }}" @selected($imagen->usuario_id === $integrante->id)>{{ $integrante->name }}</option>
+                                        @endforeach
+                                    </select>
                                     <input type="text" name="descripcion" value="{{ $imagen->descripcion }}" maxlength="200" placeholder="Descripción" aria-label="Descripción de la imagen" class="{{ $input }}">
-                                    <button type="submit" class="{{ $actBtn }} self-end border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Guardar descripción</button>
+                                    <button type="submit" class="{{ $actBtn }} self-end border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Guardar cambios</button>
                                 </form>
                                 <form method="POST" action="{{ route('admin.posts.imagenes.destroy', [$post, $imagen]) }}" data-keep-scroll onsubmit="return confirm('¿Eliminar esta imagen de la galería?');" class="mt-2">
                                     @csrf
