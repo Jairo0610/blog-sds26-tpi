@@ -57,7 +57,7 @@ class PostController extends Controller
 
     public function edit(PostModel $post): View
     {
-        $post->load('autores');
+        $post->load(['autores', 'imagenes']);
         $categorias = CategoriaModel::orderBy('nombre')->get();
         $actividades = ActividadModel::orderBy('fecha_hora')->get();
         $usuarios = User::orderBy('name')->get();
@@ -106,6 +106,13 @@ class PostController extends Controller
     {
         if ($post->imagen_principal && Storage::disk('public')->exists($post->imagen_principal)) {
             Storage::disk('public')->delete($post->imagen_principal);
+        }
+
+        //Las filas de post_images se borran en cascada, pero los archivos de la galería hay que quitarlos del disco
+        foreach ($post->imagenes as $imagen) {
+            if (Storage::disk('public')->exists($imagen->ruta)) {
+                Storage::disk('public')->delete($imagen->ruta);
+            }
         }
 
         $titulo = $post->titulo;

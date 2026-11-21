@@ -33,13 +33,13 @@
         </nav>
 
         @if (session('success'))
-            <div class="mb-5 rounded-[14px] border border-l-4 border-[#b5dc7a] border-l-sds-green-dark bg-[#f4faea] px-[18px] py-3.5 text-[13.5px] font-semibold text-[#4f7918]" role="status">
+            <div class="sticky top-3 z-30 mb-5 rounded-[14px] border border-l-4 border-[#b5dc7a] border-l-sds-green-dark bg-[#f4faea] px-[18px] py-3.5 text-[13.5px] font-semibold text-[#4f7918]" role="status">
                 {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="mb-5 rounded-[14px] border border-l-4 border-[#ffc9c9] border-l-[#c92a2a] bg-[#fff5f5] px-[18px] py-3.5 text-[13.5px] font-semibold text-[#9b1c1c]" role="alert">
+            <div class="sticky top-3 z-30 mb-5 rounded-[14px] border border-l-4 border-[#ffc9c9] border-l-[#c92a2a] bg-[#fff5f5] px-[18px] py-3.5 text-[13.5px] font-semibold text-[#9b1c1c]" role="alert">
                 {{ session('error') }}
             </div>
         @endif
@@ -78,7 +78,7 @@
                                 <td class="{{ $td }} text-right">
                                     <div class="inline-flex items-center justify-end gap-2 whitespace-nowrap">
                                         <a href="{{ route('admin.categorias.edit', $categoria) }}" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Editar</a>
-                                        <form method="POST" action="{{ route('admin.categorias.destroy', $categoria) }}" onsubmit="return confirm('¿Eliminar esta categoría?');">
+                                        <form method="POST" action="{{ route('admin.categorias.destroy', $categoria) }}" data-keep-scroll onsubmit="return confirm('¿Eliminar esta categoría?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="{{ $actBtn }} border border-[#ffc9c9] bg-[#fff5f5] text-[#c92a2a] hover:border-[#ffa8a8] hover:bg-[#ffe3e3]">Eliminar</button>
