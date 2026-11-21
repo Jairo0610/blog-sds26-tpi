@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
         $members = [
             ['name' => 'Jairo Alexander Argueta Alvarenga', 'carnet' => 'AA23027', 'email' => 'aa23027@ues.edu.sv'],
             ['name' => 'Yanira Verenice Martínez Aguilar', 'carnet' => 'MA22013', 'email' => 'ma22013@ues.edu.sv'],
+            ['name' => 'Admin', 'carnet' => 'AA00000', 'email' => 'admin@ues.edu.sv'],
         ];
 
         foreach ($members as $member) {
