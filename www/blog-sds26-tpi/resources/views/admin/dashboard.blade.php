@@ -108,6 +108,7 @@
                             <th class="{{ $th }}">Categoría</th>
                             <th class="{{ $th }}">Fecha actividad</th>
                             <th class="{{ $th }}">Autores</th>
+                            <th class="{{ $th }}">Evidencias</th>
                             <th class="{{ $th }}">Estado</th>
                             <th class="{{ $th }} text-right">Acciones</th>
                         </tr>
@@ -149,6 +150,18 @@
                                     @endif
                                 </td>
                                 <td class="{{ $td }}">
+                                    @php
+                                        $totalIntegrantes = $post->integrantes()->count();
+                                        $faltantes = $post->integrantesSinEvidencia();
+                                        $cubiertos = $totalIntegrantes - $faltantes->count();
+                                    @endphp
+                                    @if ($faltantes->isEmpty())
+                                        <span title="Todos los integrantes tienen evidencia" class="inline-block rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11.5px] font-bold whitespace-nowrap text-[#4f7918]">✓ {{ $cubiertos }}/{{ $totalIntegrantes }}</span>
+                                    @else
+                                        <span title="Falta evidencia de: {{ $faltantes->pluck('name')->join(', ') }}" class="inline-block rounded-full {{ $cubiertos === 0 ? 'bg-[#fff5f5] text-[#c92a2a]' : 'bg-[#fef3c7] text-[#92400e]' }} px-[11px] py-1 text-[11.5px] font-bold whitespace-nowrap">{{ $cubiertos === 0 ? '✗' : '!' }} {{ $cubiertos }}/{{ $totalIntegrantes }}</span>
+                                    @endif
+                                </td>
+                                <td class="{{ $td }}">
                                     @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
                                         <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11.5px] font-bold whitespace-nowrap text-[#4f7918] before:size-1.5 before:rounded-full before:bg-sds-green-dark before:content-['']">Publicado</span>
                                     @else
@@ -181,7 +194,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="{{ $td }} px-6 py-10 text-center text-[#78827b]">
+                                <td colspan="7" class="{{ $td }} px-6 py-10 text-center text-[#78827b]">
                                     Aún no hay publicaciones registradas. Haz clic en <strong>+ Nueva publicación</strong> para subir la primera.
                                 </td>
                             </tr>

@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $categoriasCount = CategoriaModel::count();
         $actividadesCount = ActividadModel::count();
 
-        $posts = PostModel::with(['categoria', 'actividad', 'usuario', 'autores'])->orderByDesc('updated_at')->orderByDesc('id')->get();
+        $posts = PostModel::with(['categoria', 'actividad', 'usuario', 'autores', 'imagenes'])->orderByDesc('updated_at')->orderByDesc('id')->get();
 
         return view('admin.dashboard', compact(
             'totalPosts',

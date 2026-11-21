@@ -116,9 +116,12 @@
                         @foreach ($post->imagenes as $img)
                             <figure class="m-0 overflow-hidden rounded-[14px] border border-[#e3e8e0] bg-[#fafbf9]">
                                 <img src="{{ asset('storage/' . $img->ruta) }}" alt="{{ $img->descripcion ?? $post->titulo }}" loading="lazy" class="block aspect-[16/10] w-full object-cover">
-                                @if ($img->descripcion)
-                                    <figcaption class="px-3 py-2 text-xs text-[#4a544d]">{{ $img->descripcion }}</figcaption>
-                                @endif
+                                <figcaption class="px-3 py-2 text-xs text-[#4a544d]">
+                                    <span class="mb-1 inline-block rounded-full bg-[#e8f4d4] px-2 py-0.5 text-[10.5px] font-bold tracking-[.04em] text-[#4f7918] uppercase">Evidencia de: {{ $img->integrante->name ?? 'Ambos integrantes' }}</span>
+                                    @if ($img->descripcion)
+                                        <span class="block">{{ $img->descripcion }}</span>
+                                    @endif
+                                </figcaption>
                             </figure>
                         @endforeach
                     </div>
