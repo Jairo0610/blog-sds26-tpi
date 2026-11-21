@@ -14,5 +14,29 @@
 </head>
 <body class="min-h-screen bg-white font-sans text-sds-ink antialiased">
     @yield('content')
+
+    {{-- Conserva la posición de la página al enviar formularios marcados con data-keep-scroll --}}
+    <script>
+    (function () {
+        var key = 'scroll:' + location.pathname;
+
+        document.addEventListener('submit', function (e) {
+            var form = e.target;
+            if (form.hasAttribute && form.hasAttribute('data-keep-scroll') && !e.defaultPrevented) {
+                try { sessionStorage.setItem(key, String(window.scrollY)); } catch (_) {}
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var y = sessionStorage.getItem(key);
+                if (y !== null) {
+                    sessionStorage.removeItem(key);
+                    window.scrollTo(0, parseInt(y, 10) || 0);
+                }
+            } catch (_) {}
+        });
+    })();
+    </script>
 </body>
 </html>

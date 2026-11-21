@@ -11,6 +11,7 @@ class PostImagenModel extends Model
 
     protected $fillable = [
         'post_id',
+        'usuario_id',
         'ruta',
         'descripcion',
         'orden',
@@ -19,5 +20,11 @@ class PostImagenModel extends Model
     public function entrada(): BelongsTo
     {
         return $this->belongsTo(PostModel::class, 'post_id');
+    }
+
+    //Integrante dueño de la evidencia; null significa que corresponde a ambos integrantes
+    public function integrante(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

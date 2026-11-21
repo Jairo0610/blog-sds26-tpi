@@ -103,21 +103,33 @@
 
                 {{-- Filtro por categoría --}}
                 @if ($categorias->isNotEmpty())
-                    <div class="flex flex-wrap gap-2">
-                        <a href="{{ route('home') }}#publicaciones"
-                            @class([
-                                'rounded-full px-4 py-1.5 text-sm font-medium transition',
-                                'bg-sds-ink text-white' => ! $categoriaActual,
-                                'bg-sds-mint text-sds-ink hover:bg-sds-green/30' => $categoriaActual,
-                            ])>Todas</a>
-                        @foreach ($categorias as $categoria)
-                            <a href="{{ route('home', ['categoria' => $categoria->slug]) }}#publicaciones"
-                                @class([
-                                    'rounded-full px-4 py-1.5 text-sm font-medium transition',
-                                    'bg-sds-ink text-white' => $categoriaActual === $categoria->slug,
-                                    'bg-sds-mint text-sds-ink hover:bg-sds-green/30' => $categoriaActual !== $categoria->slug,
-                                ])>{{ $categoria->nombre }}</a>
-                        @endforeach
+                    <div class="mt-5 flex flex-wrap items-center gap-3">
+                        @auth
+                            <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center gap-1.5 rounded-full bg-linear-to-br from-sds-green to-sds-green-dark px-4 py-2 text-[13px] font-bold text-white no-underline shadow-[0_3px_10px_rgba(111,165,43,.28)]">
+                                <span>+ Nueva publicación</span>
+                            </a>
+                        @endauth
+                        <label for="filtro-categoria" class="text-sm font-semibold text-sds-ink/70">
+                            Categoría:
+                        </label>
+                        <select
+                            id="filtro-categoria"
+                            name="categoria"
+                            onchange="if (this.value) { window.location.href = this.value; }"
+                            class="cursor-pointer rounded-xl border border-[#cfd7cb] bg-white px-3.5 py-2 text-[13.5px] font-semibold text-sds-ink"
+                        >
+                            <option value="{{ route('home') }}#publicaciones" @selected(! $categoriaActual)>
+                                Todas las categorías
+                            </option>
+                            @foreach ($categorias as $categoria)
+                                <option
+                                    value="{{ route('home', ['categoria' => $categoria->slug]) }}#publicaciones"
+                                    @selected($categoriaActual === $categoria->slug)
+                                >
+                                    {{ $categoria->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 @endif
             </div>
@@ -161,8 +173,13 @@
                                 @if ($post->resumen)
                                     <p class="mt-2 line-clamp-3 text-sm text-sds-ink/65">{{ $post->resumen }}</p>
                                 @endif
-                                @if ($post->usuario)
-                                    <p class="mt-auto pt-5 text-xs font-medium text-sds-ink/50">Por {{ $post->usuario->name }}</p>
+                                @php
+                                    $autoresTexto = ($post->autores && $post->autores->isNotEmpty())
+                                        ? $post->autores->pluck('name')->join(', ')
+                                        : ($post->usuario->name ?? null);
+                                @endphp
+                                @if ($autoresTexto)
+                                    <p class="mt-auto pt-5 text-xs font-medium text-sds-ink/50">Por {{ $autoresTexto }}</p>
                                 @endif
                             </div>
                         </article>
@@ -267,7 +284,7 @@
                 <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26" class="h-9 w-auto">
             </div>
             <p class="text-sm text-sds-ink/55">
-                Asociación de Estudiantes de Ingeniería de Sistemas · Universidad de El Salvador, FMO
+                Universidad de El Salvador FMO
             </p>
         </div>
     </footer>

@@ -18,7 +18,6 @@ class ActividadSeeder extends Seeder
         $categoria = fn (string $nombre) => CategoriaModel::where('nombre', $nombre)->value('id');
 
         $actividades = [
-            ['Inauguración', 'Inauguración', '¡Comienza el evento!', '2026-11-16 08:00', 'Auditorio 1'],
             ['Ponencias', 'Ponencia 1', 'Investigación aplicada en IoT para la agricultura en El Salvador.', '2026-11-16 10:00', 'Auditorio 1'],
             ['Ponencias', 'Ponencia 2', 'Energías alternativas y eficiencia energética.', '2026-11-16 13:00', 'Auditorio 1'],
             ['Ponencias', 'Ponencia 3', 'Eficiencia energética, optimización de recursos y sostenibilidad aplicada a soluciones tecnológicas.', '2026-11-17 08:00', 'Auditorio 1'],
