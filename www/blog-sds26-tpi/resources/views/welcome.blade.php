@@ -105,7 +105,7 @@
                 @if ($categorias->isNotEmpty())
                     <div class="mt-5 flex flex-wrap items-center gap-3">
                         @auth
-                            <a href="{{ route('admin.posts.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;background:linear-gradient(135deg,#8cc63f,#6fa52b);color:#ffffff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px rgba(111,165,43,.28);">
+                            <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center gap-1.5 rounded-full bg-linear-to-br from-sds-green to-sds-green-dark px-4 py-2 text-[13px] font-bold text-white no-underline shadow-[0_3px_10px_rgba(111,165,43,.28)]">
                                 <span>+ Nueva publicación</span>
                             </a>
                         @endauth
@@ -116,7 +116,7 @@
                             id="filtro-categoria"
                             name="categoria"
                             onchange="if (this.value) { window.location.href = this.value; }"
-                            style="padding:8px 14px;border-radius:12px;border:1px solid #cfd7cb;background:#ffffff;color:#111613;font-size:13.5px;font-weight:600;cursor:pointer;"
+                            class="cursor-pointer rounded-xl border border-[#cfd7cb] bg-white px-3.5 py-2 text-[13.5px] font-semibold text-sds-ink"
                         >
                             <option value="{{ route('home') }}#publicaciones" @selected(! $categoriaActual)>
                                 Todas las categorías

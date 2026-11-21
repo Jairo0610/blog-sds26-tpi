@@ -3,425 +3,172 @@
 @section('title', 'Panel de control')
 
 @section('content')
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+@php
+    $btn = 'inline-flex items-center justify-center gap-[7px] rounded-[11px] px-4 py-[9px] font-[inherit] text-[13px] font-semibold no-underline cursor-pointer transition';
+    $btnGhost = $btn . ' border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]';
+    $btnPrimary = $btn . ' border-0 bg-linear-to-br from-sds-green to-sds-green-dark font-bold text-white shadow-[0_3px_10px_rgba(111,165,43,.28)] hover:-translate-y-px hover:shadow-[0_5px_14px_rgba(111,165,43,.38)]';
+    $btnDark = $btn . ' border border-sds-ink bg-transparent text-sds-ink hover:bg-sds-ink hover:text-white';
 
-<style>
-    .sds-dash-page {
-        --g-50: #f4faea;
-        --g-100: #e8f4d4;
-        --g-500: #8cc63f;
-        --g-600: #6fa52b;
-        --g-700: #4f7918;
-        --ink: #111613;
-        --ink-2: #4a544d;
-        --ink-3: #78827b;
-        --line: #e3e8e0;
-        --line-2: #cfd7cb;
-        --bg: #f4f7f1;
-        --danger: #c92a2a;
-        --amber-bg: #fef3c7;
-        --amber-txt: #92400e;
-        --radius: 16px;
+    $statCard = 'flex flex-col justify-between rounded-2xl border border-[#e3e8e0] bg-white px-5 py-[18px] shadow-[0_2px_10px_rgba(17,22,19,.03)]';
+    $statLabel = 'text-[11.5px] font-bold tracking-[.04em] text-[#78827b] uppercase';
+    $statValue = 'mt-2.5 mb-0 text-[28px] leading-[1.1] font-extrabold tabular-nums';
 
-        min-height: 100vh;
-        background:
-            radial-gradient(900px 380px at 100% -10%, rgba(140, 198, 63, .16), transparent 60%),
-            radial-gradient(700px 320px at -10% 0%, rgba(140, 198, 63, .08), transparent 60%),
-            var(--bg);
-        color: var(--ink);
-        font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, sans-serif;
-        -webkit-font-smoothing: antialiased;
-    }
-    .sds-dash-page *, .sds-dash-page *::before, .sds-dash-page *::after { box-sizing: border-box; }
+    $th = 'whitespace-nowrap border-b border-[#e3e8e0] bg-[#f8faf6] px-[18px] py-3 text-[11px] font-bold tracking-[.05em] text-[#78827b] uppercase';
+    $td = 'border-b border-[#f0f3ed] px-[18px] py-3.5 align-middle text-[#4a544d]';
 
-    /* Topbar */
-    .sds-topbar {
-        position: sticky; top: 0; z-index: 30;
-        background: rgba(255, 255, 255, .9);
-        backdrop-filter: saturate(160%) blur(10px);
-        -webkit-backdrop-filter: saturate(160%) blur(10px);
-        border-bottom: 1px solid var(--line);
-    }
-    .sds-topbar-inner {
-        max-width: 1200px; margin: 0 auto; padding: 12px 24px;
-        display: flex; align-items: center; justify-content: space-between; gap: 16px;
-        flex-wrap: wrap;
-    }
-    .sds-brand-group { display: inline-flex; align-items: center; gap: 14px; text-decoration: none; }
-    .sds-logo-aseis { height: 30px; width: auto; max-width: none; display: block; }
-    .sds-logo-sds { height: 38px; width: auto; max-width: none; display: block; }
-    .sds-divider-v { width: 1px; height: 28px; background: var(--line-2); }
-    .sds-brand-badge {
-        font-size: 12px; font-weight: 600; color: var(--ink-2);
-        background: var(--g-50); border: 1px solid var(--g-100);
-        padding: 4px 10px; border-radius: 999px;
-    }
+    $actBtn = 'inline-flex items-center justify-center rounded-lg px-3 py-1.5 font-[inherit] text-xs font-semibold no-underline cursor-pointer transition';
+@endphp
 
-    .sds-top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .sds-btn {
-        display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-        padding: 9px 16px; border-radius: 11px;
-        font-family: inherit; font-size: 13px; font-weight: 600;
-        text-decoration: none; cursor: pointer; transition: all .15s ease;
-    }
-    .sds-btn-ghost {
-        border: 1px solid var(--line-2); background: #fff; color: var(--ink);
-    }
-    .sds-btn-ghost:hover { background: var(--g-50); border-color: var(--g-500); color: var(--g-700); }
-    .sds-btn-primary {
-        border: none; color: #fff; font-weight: 700;
-        background: linear-gradient(135deg, var(--g-500), var(--g-600));
-        box-shadow: 0 3px 10px rgba(111, 165, 43, .28);
-    }
-    .sds-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(111, 165, 43, .38); }
-    .sds-btn-dark {
-        border: 1px solid var(--ink); background: transparent; color: var(--ink);
-    }
-    .sds-btn-dark:hover { background: var(--ink); color: #fff; }
-
-    /* Main */
-    .sds-main-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 24px 56px; }
-
-    .sds-alert-ok {
-        margin-bottom: 20px; padding: 14px 18px; border-radius: 14px;
-        border: 1px solid #b5dc7a; border-left: 4px solid var(--g-600);
-        background: var(--g-50); color: var(--g-700);
-        font-size: 13.5px; font-weight: 600;
-    }
-
-    /* Cabecera */
-    .sds-hero-banner {
-        position: relative; overflow: hidden;
-        margin-bottom: 24px; padding: 24px 28px;
-        border-radius: 20px;
-        background: linear-gradient(135deg, #ffffff 0%, #f3faea 100%);
-        border: 1px solid var(--line);
-        box-shadow: 0 4px 20px rgba(17, 22, 19, .035);
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
-    }
-    .sds-hero-tag {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 4px 11px; border-radius: 999px;
-        background: var(--g-100); color: var(--g-700);
-        font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-        margin-bottom: 8px;
-    }
-    .sds-hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--g-500); }
-    .sds-hero-title { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.15; letter-spacing: -.01em; }
-    .sds-hero-sub { margin: 6px 0 0; font-size: 13.5px; color: var(--ink-2); }
-
-    /* KPIs en 4 columnas */
-    .sds-stats-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 26px;
-    }
-    @media (max-width: 900px) { .sds-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 520px) { .sds-stats-grid { grid-template-columns: 1fr; } }
-
-    .sds-stat-card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 18px 20px;
-        box-shadow: 0 2px 10px rgba(17, 22, 19, .03);
-        display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .sds-stat-top {
-        display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .sds-stat-label {
-        font-size: 11.5px; font-weight: 700; text-transform: uppercase;
-        letter-spacing: .04em; color: var(--ink-3);
-    }
-    .sds-stat-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
-    .sds-stat-dot.is-green { background: var(--g-500); }
-    .sds-stat-dot.is-amber { background: #e8a317; }
-    .sds-stat-value {
-        margin: 10px 0 0; font-size: 28px; font-weight: 800; line-height: 1.1;
-        color: var(--ink); font-variant-numeric: tabular-nums;
-    }
-    .sds-stat-value.is-green { color: var(--g-600); }
-    .sds-stat-value.is-amber { color: var(--amber-txt); }
-
-    /* Tabla de publicaciones */
-    .sds-table-card {
-        background: #fff;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(17, 22, 19, .04);
-    }
-    .sds-table-head {
-        padding: 18px 24px;
-        border-bottom: 1px solid var(--line);
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
-    }
-    .sds-table-title { margin: 0; font-size: 16.5px; font-weight: 800; color: var(--ink); }
-    .sds-table-link {
-        font-size: 13px; font-weight: 700; color: var(--g-700); text-decoration: none;
-    }
-    .sds-table-link:hover { text-decoration: underline; }
-
-    .sds-table-scroll { width: 100%; overflow-x: auto; }
-    .sds-table {
-        width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px;
-    }
-    .sds-table th {
-        padding: 12px 18px;
-        background: #f8faf6;
-        border-bottom: 1px solid var(--line);
-        font-size: 11px; font-weight: 700; text-transform: uppercase;
-        letter-spacing: .05em; color: var(--ink-3);
-        white-space: nowrap;
-    }
-    .sds-table td {
-        padding: 14px 18px;
-        border-bottom: 1px solid #f0f3ed;
-        vertical-align: middle;
-        color: var(--ink-2);
-    }
-    .sds-table tbody tr:last-child td { border-bottom: none; }
-    .sds-table tbody tr:hover { background: #fafcf8; }
-
-    /* Celda Título + Miniatura fija */
-    .sds-post-cell {
-        display: flex; align-items: center; gap: 14px; min-width: 240px;
-    }
-    .sds-post-thumb {
-        width: 72px; height: 48px; border-radius: 10px;
-        object-fit: cover; flex-shrink: 0;
-        border: 1px solid var(--line); background: var(--g-50);
-        display: block;
-    }
-    .sds-post-thumb-placeholder {
-        width: 72px; height: 48px; border-radius: 10px;
-        border: 1px dashed var(--line-2); background: var(--g-50);
-        color: var(--g-700); font-size: 10px; font-weight: 700;
-        display: inline-flex; align-items: center; justify-content: center;
-        flex-shrink: 0; text-transform: uppercase;
-    }
-    .sds-post-info { min-width: 0; }
-    .sds-post-name {
-        display: block; font-size: 14px; font-weight: 700; color: var(--ink);
-        line-height: 1.35; text-decoration: none;
-    }
-    .sds-post-name:hover { color: var(--g-700); }
-    .sds-post-sub {
-        display: block; margin-top: 2px; font-size: 11.5px; color: var(--ink-3);
-        max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .sds-cat-pill {
-        display: inline-block; padding: 4px 10px; border-radius: 8px;
-        background: #f3f6f1; border: 1px solid #e4e9e0;
-        font-size: 12px; font-weight: 600; color: var(--ink-2);
-        white-space: nowrap;
-    }
-    .sds-date-cell { white-space: nowrap; font-size: 13px; font-variant-numeric: tabular-nums; }
-    .sds-authors-cell { min-width: 170px; max-width: 240px; font-size: 12.5px; line-height: 1.4; color: var(--ink); font-weight: 500; }
-
-    .sds-status-badge {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 4px 11px; border-radius: 999px;
-        font-size: 11.5px; font-weight: 700; white-space: nowrap;
-    }
-    .sds-status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-    .sds-status-badge.is-pub { background: var(--g-100); color: var(--g-700); }
-    .sds-status-badge.is-pub::before { background: var(--g-600); }
-    .sds-status-badge.is-draft { background: var(--amber-bg); color: var(--amber-txt); }
-    .sds-status-badge.is-draft::before { background: #d97706; }
-
-    /* Botones de acción */
-    .sds-row-actions {
-        display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px;
-        white-space: nowrap;
-    }
-    .sds-act-btn {
-        display: inline-flex; align-items: center; justify-content: center;
-        padding: 6px 12px; border-radius: 8px;
-        font-family: inherit; font-size: 12px; font-weight: 600;
-        text-decoration: none; cursor: pointer; transition: all .15s ease;
-    }
-    .sds-act-view {
-        border: 1px solid var(--g-100); background: var(--g-50); color: var(--g-700);
-    }
-    .sds-act-view:hover { border-color: var(--g-500); background: var(--g-100); }
-    .sds-act-edit {
-        border: 1px solid var(--line-2); background: #fff; color: var(--ink);
-    }
-    .sds-act-edit:hover { border-color: var(--g-500); background: var(--g-50); color: var(--g-700); }
-    .sds-act-del {
-        border: 1px solid #ffc9c9; background: #fff5f5; color: var(--danger);
-    }
-    .sds-act-del:hover { background: #ffe3e3; border-color: #ffa8a8; }
-
-    .sds-empty-row {
-        padding: 40px 24px !important; text-align: center; color: var(--ink-3);
-    }
-
-    @media (max-width: 640px) {
-        .sds-topbar-inner, .sds-main-wrap { padding-left: 16px; padding-right: 16px; }
-        .sds-logo-aseis { height: 24px; } .sds-logo-sds { height: 30px; }
-        .sds-brand-badge { display: none; }
-        .sds-hero-banner { padding: 18px 20px; }
-        .sds-hero-title { font-size: 22px; }
-    }
-</style>
-
-<div class="sds-dash-page">
-    <header class="sds-topbar">
-        <div class="sds-topbar-inner">
-            <div class="sds-brand-group">
-                <a href="{{ route('admin.dashboard') }}" class="sds-brand-group">
-                    <img src="{{ asset('img/aseis-logo.png') }}" alt="ASEIS - Universidad de El Salvador" class="sds-logo-aseis">
-                    <span class="sds-divider-v"></span>
-                    <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26 Green IoT" class="sds-logo-sds">
+<div class="min-h-screen bg-[#f4f7f1] bg-[radial-gradient(900px_380px_at_100%_-10%,rgba(140,198,63,.16),transparent_60%),radial-gradient(700px_320px_at_-10%_0%,rgba(140,198,63,.08),transparent_60%)] font-['Poppins',ui-sans-serif,system-ui,sans-serif] text-sds-ink antialiased">
+    <header class="sticky top-0 z-30 border-b border-[#e3e8e0] bg-white/90 backdrop-blur-md backdrop-saturate-150">
+        <div class="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6">
+            <div class="inline-flex items-center gap-[14px]">
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-[14px] no-underline">
+                    <img src="{{ asset('img/aseis-logo.png') }}" alt="ASEIS - Universidad de El Salvador" class="block h-6 w-auto max-w-none sm:h-[30px]">
+                    <span class="h-7 w-px bg-[#cfd7cb]"></span>
+                    <img src="{{ asset('img/sds26-logo.png') }}" alt="SDS26 Green IoT" class="block h-[30px] w-auto max-w-none sm:h-[38px]">
                 </a>
-                <span class="sds-brand-badge">Panel administrativo</span>
+                <span class="hidden rounded-full border border-[#e8f4d4] bg-[#f4faea] px-2.5 py-1 text-xs font-semibold text-[#4a544d] sm:inline">Panel administrativo</span>
             </div>
 
-            <div class="sds-top-actions">
-                <a href="{{ route('home') }}" class="sds-btn sds-btn-ghost">Ver blog</a>
-                <a href="{{ route('admin.posts.create') }}" class="sds-btn sds-btn-primary">+ Nueva publicación</a>
-                <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+            <div class="flex flex-wrap items-center gap-2.5">
+                <a href="{{ route('home') }}" class="{{ $btnGhost }}">Ver blog</a>
+                <a href="{{ route('admin.posts.create') }}" class="{{ $btnPrimary }}">+ Nueva publicación</a>
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="sds-btn sds-btn-dark">Cerrar sesión</button>
+                    <button type="submit" class="{{ $btnDark }}">Cerrar sesión</button>
                 </form>
             </div>
         </div>
     </header>
 
-    <main class="sds-main-wrap">
+    <main class="mx-auto max-w-[1200px] px-4 pt-7 pb-14 sm:px-6">
         @if (session('success'))
-            <div class="sds-alert-ok" role="status">
+            <div class="mb-5 rounded-[14px] border border-l-4 border-[#b5dc7a] border-l-sds-green-dark bg-[#f4faea] px-[18px] py-3.5 text-[13.5px] font-semibold text-[#4f7918]" role="status">
                 {{ session('success') }}
             </div>
         @endif
 
-        <section class="sds-hero-banner">
+        <section class="relative mb-6 flex flex-wrap items-center justify-between gap-4 overflow-hidden rounded-[20px] border border-[#e3e8e0] bg-linear-to-br from-white from-0% to-[#f3faea] to-100% px-5 py-[18px] shadow-[0_4px_20px_rgba(17,22,19,.035)] sm:px-7 sm:py-6">
             <div>
-                <span class="sds-hero-tag">Semana de Sistemas 2026 · Administración</span>
-                <h1 class="sds-hero-title">Panel de control</h1>
-                <p class="sds-hero-sub">Sesión iniciada como <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->carnet }}).</p>
+                <span class="mb-2 inline-flex items-center gap-1.5 rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11px] font-bold tracking-[.06em] text-[#4f7918] uppercase before:size-1.5 before:rounded-full before:bg-sds-green before:content-['']">Semana de Sistemas 2026 · Administración</span>
+                <h1 class="m-0 text-[22px] leading-[1.15] font-extrabold tracking-[-.01em] sm:text-[26px]">Panel de control</h1>
+                <p class="mt-1.5 mb-0 text-[13.5px] text-[#4a544d]">Sesión iniciada como <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->carnet }}).</p>
             </div>
         </section>
 
-        <section class="sds-stats-grid" aria-label="Resumen de publicaciones">
-            <div class="sds-stat-card">
-                <div class="sds-stat-top">
-                    <span class="sds-stat-label">Total publicaciones</span>
-                    <span class="sds-stat-dot"></span>
+        <section class="mb-[26px] grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 min-[900px]:grid-cols-4" aria-label="Resumen de publicaciones">
+            <div class="{{ $statCard }}">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="{{ $statLabel }}">Total publicaciones</span>
+                    <span class="size-[9px] rounded-full bg-[#cfd7cb]"></span>
                 </div>
-                <p class="sds-stat-value">{{ $totalPosts ?? 0 }}</p>
+                <p class="{{ $statValue }} text-sds-ink">{{ $totalPosts ?? 0 }}</p>
             </div>
 
-            <div class="sds-stat-card">
-                <div class="sds-stat-top">
-                    <span class="sds-stat-label">Publicadas</span>
-                    <span class="sds-stat-dot is-green"></span>
+            <div class="{{ $statCard }}">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="{{ $statLabel }}">Publicadas</span>
+                    <span class="size-[9px] rounded-full bg-sds-green"></span>
                 </div>
-                <p class="sds-stat-value is-green">{{ $publicadasCount ?? 0 }}</p>
+                <p class="{{ $statValue }} text-sds-green-dark">{{ $publicadasCount ?? 0 }}</p>
             </div>
 
-            <div class="sds-stat-card">
-                <div class="sds-stat-top">
-                    <span class="sds-stat-label">Borradores</span>
-                    <span class="sds-stat-dot is-amber"></span>
+            <div class="{{ $statCard }}">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="{{ $statLabel }}">Borradores</span>
+                    <span class="size-[9px] rounded-full bg-[#e8a317]"></span>
                 </div>
-                <p class="sds-stat-value is-amber">{{ $borradoresCount ?? 0 }}</p>
+                <p class="{{ $statValue }} text-[#92400e]">{{ $borradoresCount ?? 0 }}</p>
             </div>
 
-            <div class="sds-stat-card">
-                <div class="sds-stat-top">
-                    <span class="sds-stat-label">Categorías / Actividades</span>
-                    <span class="sds-stat-dot is-green"></span>
+            <div class="{{ $statCard }}">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="{{ $statLabel }}">Categorías / Actividades</span>
+                    <span class="size-[9px] rounded-full bg-sds-green"></span>
                 </div>
-                <p class="sds-stat-value">{{ $categoriasCount ?? 0 }} / {{ $actividadesCount ?? 0 }}</p>
+                <p class="{{ $statValue }} text-sds-ink">{{ $categoriasCount ?? 0 }} / {{ $actividadesCount ?? 0 }}</p>
             </div>
         </section>
 
-        <section class="sds-table-card">
-            <div class="sds-table-head">
-                <h2 class="sds-table-title">Publicaciones registradas</h2>
-                <a href="{{ route('admin.posts.create') }}" class="sds-table-link">+ Subir nueva entrada</a>
+        <section class="overflow-hidden rounded-[18px] border border-[#e3e8e0] bg-white shadow-[0_4px_20px_rgba(17,22,19,.04)]">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#e3e8e0] px-6 py-[18px]">
+                <h2 class="m-0 text-[16.5px] font-extrabold text-sds-ink">Publicaciones registradas</h2>
+                <a href="{{ route('admin.posts.create') }}" class="text-[13px] font-bold text-[#4f7918] no-underline hover:underline">+ Subir nueva entrada</a>
             </div>
 
-            <div class="sds-table-scroll">
-                <table class="sds-table">
+            <div class="w-full overflow-x-auto">
+                <table class="w-full border-collapse text-left text-[13.5px]">
                     <thead>
                         <tr>
-                            <th>Publicación</th>
-                            <th>Categoría</th>
-                            <th>Fecha actividad</th>
-                            <th>Autores</th>
-                            <th>Estado</th>
-                            <th style="text-align:right;">Acciones</th>
+                            <th class="{{ $th }}">Publicación</th>
+                            <th class="{{ $th }}">Categoría</th>
+                            <th class="{{ $th }}">Fecha actividad</th>
+                            <th class="{{ $th }}">Autores</th>
+                            <th class="{{ $th }}">Estado</th>
+                            <th class="{{ $th }} text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="[&>tr:last-child>td]:border-b-0">
                         @forelse ($posts ?? [] as $post)
-                            <tr>
-                                <td>
-                                    <div class="sds-post-cell">
+                            <tr class="hover:bg-[#fafcf8]">
+                                <td class="{{ $td }}">
+                                    <div class="flex min-w-60 items-center gap-3.5">
                                         @if ($post->imagen_principal)
-                                            <img src="{{ asset('storage/' . $post->imagen_principal) }}" alt="{{ $post->titulo }}" class="sds-post-thumb">
+                                            <img src="{{ asset('storage/' . $post->imagen_principal) }}" alt="{{ $post->titulo }}" class="block h-12 w-[72px] shrink-0 rounded-[10px] border border-[#e3e8e0] bg-[#f4faea] object-cover">
                                         @else
-                                            <span class="sds-post-thumb-placeholder">SDS26</span>
+                                            <span class="inline-flex h-12 w-[72px] shrink-0 items-center justify-center rounded-[10px] border border-dashed border-[#cfd7cb] bg-[#f4faea] text-[10px] font-bold text-[#4f7918] uppercase">SDS26</span>
                                         @endif
 
-                                        <div class="sds-post-info">
+                                        <div class="min-w-0">
                                             @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
-                                                <a href="{{ route('posts.show', $post->slug) }}" class="sds-post-name">{{ $post->titulo }}</a>
+                                                <a href="{{ route('posts.show', $post->slug) }}" class="block text-sm leading-[1.35] font-bold text-sds-ink no-underline hover:text-[#4f7918]">{{ $post->titulo }}</a>
                                             @else
-                                                <span class="sds-post-name">{{ $post->titulo }}</span>
+                                                <span class="block text-sm leading-[1.35] font-bold text-sds-ink">{{ $post->titulo }}</span>
                                             @endif
                                             @if ($post->resumen)
-                                                <span class="sds-post-sub">{{ $post->resumen }}</span>
+                                                <span class="mt-0.5 block max-w-80 truncate text-[11.5px] text-[#78827b]">{{ $post->resumen }}</span>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="sds-cat-pill">{{ $post->categoria->nombre ?? '—' }}</span>
+                                <td class="{{ $td }}">
+                                    <span class="inline-block rounded-lg border border-[#e4e9e0] bg-[#f3f6f1] px-2.5 py-1 text-xs font-semibold whitespace-nowrap text-[#4a544d]">{{ $post->categoria->nombre ?? '—' }}</span>
                                 </td>
-                                <td class="sds-date-cell">
+                                <td class="{{ $td }} text-[13px] whitespace-nowrap tabular-nums">
                                     {{ optional($post->fecha_actividad)->format('d/m/Y') ?? '—' }}
                                 </td>
-                                <td class="sds-authors-cell">
+                                <td class="{{ $td }} max-w-60 min-w-[170px] text-[12.5px] leading-[1.4] font-medium text-sds-ink">
                                     @if ($post->autores && $post->autores->isNotEmpty())
                                         {{ $post->autores->pluck('name')->join(', ') }}
                                     @else
                                         {{ $post->usuario->name ?? '—' }}
                                     @endif
                                 </td>
-                                <td>
+                                <td class="{{ $td }}">
                                     @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
-                                        <span class="sds-status-badge is-pub">Publicado</span>
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e8f4d4] px-[11px] py-1 text-[11.5px] font-bold whitespace-nowrap text-[#4f7918] before:size-1.5 before:rounded-full before:bg-sds-green-dark before:content-['']">Publicado</span>
                                     @else
-                                        <span class="sds-status-badge is-draft">Borrador</span>
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#fef3c7] px-[11px] py-1 text-[11.5px] font-bold whitespace-nowrap text-[#92400e] before:size-1.5 before:rounded-full before:bg-[#d97706] before:content-['']">Borrador</span>
                                     @endif
                                 </td>
-                                <td style="text-align:right;">
-                                    <div class="sds-row-actions">
+                                <td class="{{ $td }} text-right">
+                                    <div class="inline-flex items-center justify-end gap-2 whitespace-nowrap">
                                         @if ($post->estado === \App\Models\PostModel::ESTADO_PUBLICADO)
-                                            <a href="{{ route('posts.show', $post->slug) }}" class="sds-act-btn sds-act-view">Ver</a>
+                                            <a href="{{ route('posts.show', $post->slug) }}" class="{{ $actBtn }} border border-[#e8f4d4] bg-[#f4faea] text-[#4f7918] hover:border-sds-green hover:bg-[#e8f4d4]">Ver</a>
                                         @endif
-                                        <a href="{{ route('admin.posts.edit', $post) }}" class="sds-act-btn sds-act-edit">Editar</a>
-                                        <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" style="margin:0;" onsubmit="return confirm('¿Eliminar esta publicación?');">
+                                        <a href="{{ route('admin.posts.edit', $post) }}" class="{{ $actBtn }} border border-[#cfd7cb] bg-white text-sds-ink hover:border-sds-green hover:bg-[#f4faea] hover:text-[#4f7918]">Editar</a>
+                                        <form method="POST" action="{{ route('admin.posts.destroy', $post) }}" onsubmit="return confirm('¿Eliminar esta publicación?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="sds-act-btn sds-act-del">Eliminar</button>
+                                            <button type="submit" class="{{ $actBtn }} border border-[#ffc9c9] bg-[#fff5f5] text-[#c92a2a] hover:border-[#ffa8a8] hover:bg-[#ffe3e3]">Eliminar</button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="sds-empty-row">
+                                <td colspan="6" class="{{ $td }} px-6 py-10 text-center text-[#78827b]">
                                     Aún no hay publicaciones registradas. Haz clic en <strong>+ Nueva publicación</strong> para subir la primera.
                                 </td>
                             </tr>

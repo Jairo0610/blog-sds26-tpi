@@ -41,7 +41,7 @@
                     </a>
                     <a href="{{ route('admin.posts.edit', $post) }}" class="{{ $btnOutline }}">Editar entrada</a>
                 @endauth
-                <a href="{{ route('home') }}" class="{{ $btnOutline }}">← Volver al blog</a>
+                <a href="{{ route('home') }}" class="{{ $btnOutline }}">Volver al blog</a>
             </div>
         </div>
     </header>
@@ -127,7 +127,7 @@
 
             <div class="mx-[18px] flex flex-wrap items-center justify-between gap-3 border-t border-[#eff2ec] pt-[18px] pb-7 text-[12.5px] text-[#78827b] sm:mx-[34px]">
                 <span>Semana de Sistemas 2026 · Green IoT</span>
-                <a href="{{ route('home') }}" class="{{ $btnOutline }}">← Ver todas las publicaciones</a>
+                <a href="{{ route('home') }}" class="{{ $btnOutline }}">Ver todas las publicaciones</a>
             </div>
         </article>
 

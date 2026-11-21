@@ -48,17 +48,11 @@ class PostController extends Controller
             'publicado_en' => $estado === PostModel::ESTADO_PUBLICADO ? now() : null,
         ]);
 
-        $autoresIds = collect($validated['autores'] ?? [$request->user()->id])
-            ->map(fn ($id) => (int) $id)
-            ->unique()
-            ->values()
-            ->all();
+        $autoresIds = collect($validated['autores'] ?? [$request->user()->id])->map(fn ($id) => (int) $id)->unique()->values()->all();
 
         $post->autores()->sync($autoresIds);
 
-        return redirect()
-            ->route('admin.dashboard')
-            ->with('success', 'La publicación "' . $post->titulo . '" se guardó correctamente.');
+        return redirect()->route('admin.dashboard')->with('success', 'La publicación "' . $post->titulo . '" se guardó correctamente.');
     }
 
     public function edit(PostModel $post): View
@@ -101,17 +95,11 @@ class PostController extends Controller
             'publicado_en' => $publicadoEn,
         ]);
 
-        $autoresIds = collect($validated['autores'] ?? [$post->usuario_id])
-            ->map(fn ($id) => (int) $id)
-            ->unique()
-            ->values()
-            ->all();
+        $autoresIds = collect($validated['autores'] ?? [$post->usuario_id])->map(fn ($id) => (int) $id)->unique()->values()->all();
 
         $post->autores()->sync($autoresIds);
 
-        return redirect()
-            ->route('admin.dashboard')
-            ->with('success', 'La publicación "' . $post->titulo . '" se actualizó correctamente.');
+        return redirect()->route('admin.dashboard')->with('success', 'La publicación "' . $post->titulo . '" se actualizó correctamente.');
     }
 
     public function destroy(PostModel $post): RedirectResponse
@@ -124,9 +112,7 @@ class PostController extends Controller
         $post->autores()->detach();
         $post->delete();
 
-        return redirect()
-            ->route('admin.dashboard')
-            ->with('success', 'La publicación "' . $titulo . '" fue eliminada.');
+        return redirect()->route('admin.dashboard')->with('success', 'La publicación "' . $titulo . '" fue eliminada.');
     }
 
     private function validatePost(Request $request): array
