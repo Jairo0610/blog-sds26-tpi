@@ -45,9 +45,21 @@ Son contraseñas de demostración, solo para ejecutar el proyecto en un entorno 
 
 ## Instalación
 
-Todos los comandos se ejecutan en una terminal de Ubuntu (WSL), salvo los marcados como **dentro del contenedor**.
+Todos los comandos se ejecutan en una terminal de Ubuntu (WSL), dentro de la carpeta del repositorio. El repositorio ya incluye el respaldo de la base de datos (`www/blog-sds26-tpi/db_blog_sds26.sql`) y las imágenes de las publicaciones (`entrega/posts`), así que no hace falta descargar nada más.
 
-### 1. Clonar y levantar los contenedores
+### Opción A: un solo comando (recomendada)
+
+```bash
+git clone https://github.com/Jairo0610/blog-sds26-tpi.git
+cd blog-sds26-tpi
+bash iniciar.sh
+```
+
+El script levanta los contenedores, instala dependencias, compila los estilos, crea la base de datos, carga el respaldo y copia las imágenes. La primera vez tarda unos minutos. Al terminar muestra las direcciones y el usuario para entrar. Se puede ejecutar varias veces sin problema.
+
+### Opción B: paso a paso
+
+**1. Levantar los contenedores**
 
 ```bash
 git clone https://github.com/Jairo0610/blog-sds26-tpi.git
@@ -62,9 +74,9 @@ docker compose up -d --build
 docker compose ps
 ```
 
-Deben aparecer `servidor_laravel`, `servidor_postgres` y `servidor_pgadmin` en estado *running*. La primera construcción tarda unos minutos.
+Deben aparecer `servidor_laravel`, `servidor_postgres` y `servidor_pgadmin` en estado *running*.
 
-### 2. Configurar la aplicación (dentro del contenedor)
+**2. Configurar la aplicación**
 
 ```bash
 docker exec -it -u www-data servidor_laravel bash
@@ -80,32 +92,28 @@ npm run build
 exit
 ```
 
-El `.env.example` ya viene configurado para PostgreSQL (`DB_HOST=db`, base de datos `db_blog_sds26`).
-
-### 3. Crear la base de datos y cargar los datos
-
-Primero crea la base de datos vacía:
+**3. Crear la base de datos y cargar los datos**
 
 ```bash
 docker exec servidor_postgres createdb -U postgres db_blog_sds26
+docker exec -i servidor_postgres psql -U postgres -d db_blog_sds26 < www/blog-sds26-tpi/db_blog_sds26.sql
 ```
 
+Al cargar el respaldo puede aparecer el aviso `unrecognized configuration parameter "transaction_timeout"`. Es inofensivo: los datos se cargan igual. No ejecutes `migrate` ni `--seed`, porque el respaldo ya trae las tablas y los datos.
 
-Descomprime el `.zip` de la entrega. Debe contener el archivo `db_blog_sds26.sql` y la carpeta `posts/`. Desde la carpeta donde descomprimiste, ejecuta:
+**4. Copiar las imágenes**
 
 ```bash
-docker exec -i servidor_postgres psql -U postgres -d db_blog_sds26 < db_blog_sds26.sql
-
-mkdir -p /ruta/al/repo/www/blog-sds26-tpi/storage/app/public
-cp -r posts /ruta/al/repo/www/blog-sds26-tpi/storage/app/public/
+mkdir -p www/blog-sds26-tpi/storage/app/public
+cp -r entrega/posts www/blog-sds26-tpi/storage/app/public/
 ```
 
-Reemplaza `/ruta/al/repo` por la ruta donde clonaste el proyecto. La carpeta debe llamarse `posts`, porque la base de datos guarda rutas como `posts/galeria/archivo.jpg`. No ejecutes `migrate` ni `--seed`: el respaldo ya incluye las tablas y los datos.
+La carpeta debe llamarse `posts`, porque la base de datos guarda rutas como `posts/galeria/archivo.jpg`.
 
-
-### 4. Abrir el sitio
+### Abrir el sitio
 
 Entra a http://blog-sds26-tpi.localhost:8083. Para administrar, ve a `/login` con las credenciales de la tabla de arriba.
+
 
 ## Funcionalidades
 
