@@ -102,13 +102,6 @@ cp -r posts /ruta/al/repo/www/blog-sds26-tpi/storage/app/public/
 
 Reemplaza `/ruta/al/repo` por la ruta donde clonaste el proyecto. La carpeta debe llamarse `posts`, porque la base de datos guarda rutas como `posts/galeria/archivo.jpg`. No ejecutes `migrate` ni `--seed`: el respaldo ya incluye las tablas y los datos.
 
-#### Opción B: desde cero con datos iniciales (sin publicaciones)
-
-```bash
-docker exec -it -u www-data servidor_laravel bash -c "cd /var/www/html/blog-sds26-tpi && php artisan migrate --seed"
-```
-
-Crea las tablas y carga los usuarios, las categorías y el programa de actividades.
 
 ### 4. Abrir el sitio
 
