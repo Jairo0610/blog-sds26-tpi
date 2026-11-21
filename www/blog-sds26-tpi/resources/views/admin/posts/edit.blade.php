@@ -106,7 +106,9 @@
                 <div class="grid grid-cols-1 gap-4 min-[560px]:grid-cols-2 min-[960px]:grid-cols-3">
                     @foreach ($post->imagenes as $imagen)
                         <article class="overflow-hidden rounded-[14px] border border-[#e3e8e0] bg-[#fafbf9]">
-                            <img src="{{ asset('storage/' . $imagen->ruta) }}" alt="{{ $imagen->descripcion ?? $post->titulo }}" loading="lazy" class="block aspect-[16/10] w-full object-cover">
+                            <a href="{{ asset('storage/' . $imagen->ruta) }}" target="_blank" rel="noopener" title="Abrir imagen completa" class="flex aspect-[4/3] w-full items-center justify-center bg-[#eef3ea]">
+                                <img src="{{ asset('storage/' . $imagen->ruta) }}" alt="{{ $imagen->descripcion ?? $post->titulo }}" loading="lazy" class="block size-full object-contain">
+                            </a>
                             <div class="p-3">
                                 <form method="POST" action="{{ route('admin.posts.imagenes.update', [$post, $imagen]) }}" data-keep-scroll class="flex flex-col gap-2">
                                     @csrf

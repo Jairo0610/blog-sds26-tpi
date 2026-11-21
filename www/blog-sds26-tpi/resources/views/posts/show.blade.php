@@ -115,7 +115,9 @@
                     <div class="grid grid-cols-[repeat(auto-fill,minmax(210px,1fr))] gap-3.5">
                         @foreach ($post->imagenes as $img)
                             <figure class="m-0 overflow-hidden rounded-[14px] border border-[#e3e8e0] bg-[#fafbf9]">
-                                <img src="{{ asset('storage/' . $img->ruta) }}" alt="{{ $img->descripcion ?? $post->titulo }}" loading="lazy" class="block aspect-[16/10] w-full object-cover">
+                                <button type="button" data-lightbox="{{ asset('storage/' . $img->ruta) }}" data-caption="{{ $img->descripcion }}" aria-label="Ver imagen completa" class="flex aspect-[4/3] w-full cursor-zoom-in items-center justify-center border-0 bg-[#eef3ea] p-0">
+                                    <img src="{{ asset('storage/' . $img->ruta) }}" alt="{{ $img->descripcion ?? $post->titulo }}" loading="lazy" class="block size-full object-contain">
+                                </button>
                                 <figcaption class="px-3 py-2 text-xs text-[#4a544d]">
                                     <span class="mb-1 inline-block rounded-full bg-[#e8f4d4] px-2 py-0.5 text-[10.5px] font-bold tracking-[.04em] text-[#4f7918] uppercase">Evidencia de: {{ $img->integrante->name ?? 'Ambos integrantes' }}</span>
                                     @if ($img->descripcion)
@@ -125,6 +127,34 @@
                             </figure>
                         @endforeach
                     </div>
+
+                    {{-- Visor para ver la imagen completa y ampliada --}}
+                    <dialog id="visor-imagen" class="m-auto max-h-[94vh] w-[min(94vw,1000px)] rounded-2xl border-0 bg-white p-3 shadow-[0_20px_60px_rgba(0,0,0,.35)] backdrop:bg-black/75">
+                        <button type="button" id="visor-cerrar" aria-label="Cerrar" class="absolute top-4 right-4 z-10 inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-black/60 text-lg leading-none text-white transition hover:bg-black/80">✕</button>
+                        <img id="visor-img" src="" alt="" class="mx-auto block max-h-[80vh] w-auto max-w-full rounded-xl object-contain">
+                        <p id="visor-texto" class="mt-2.5 mb-0 text-center text-[13px] text-[#4a544d]"></p>
+                    </dialog>
+                    <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var visor = document.getElementById('visor-imagen');
+                        var imagen = document.getElementById('visor-img');
+                        var texto = document.getElementById('visor-texto');
+                        if (!visor || typeof visor.showModal !== 'function') return;
+
+                        document.querySelectorAll('[data-lightbox]').forEach(function (boton) {
+                            boton.addEventListener('click', function () {
+                                imagen.src = boton.dataset.lightbox;
+                                imagen.alt = boton.dataset.caption || '';
+                                texto.textContent = boton.dataset.caption || '';
+                                visor.showModal();
+                            });
+                        });
+
+                        document.getElementById('visor-cerrar').addEventListener('click', function () { visor.close(); });
+                        visor.addEventListener('click', function (e) { if (e.target === visor) visor.close(); });
+                        visor.addEventListener('close', function () { imagen.src = ''; });
+                    });
+                    </script>
                 </section>
             @endif
 
